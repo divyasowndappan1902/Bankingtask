@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (mobileMenuBtn && navMenu) {
     mobileMenuBtn.addEventListener('click', () => {
       navMenu.classList.toggle('active');
+      const isActive = navMenu.classList.contains('active');
+      document.body.style.overflow = isActive ? 'hidden' : '';
+      document.documentElement.style.overflow = isActive ? 'hidden' : '';
+      mobileMenuBtn.textContent = isActive ? '✕' : '☰';
     });
   }
 

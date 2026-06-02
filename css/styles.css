@@ -69,8 +69,8 @@ body {
 
 .nav-link {
   text-decoration: none;
-  color: var(--text-dark);
-  font-weight: 500;
+  color: #00B4D8; /* Aqua Blue */
+  font-weight: 600;
   position: relative;
   padding: 0.5rem 0;
   transition: var(--transition);
@@ -91,7 +91,12 @@ body {
   color: var(--secondary-color);
 }
 
-.nav-link:hover::after {
+.nav-link.active {
+  color: darkblue !important; /* Specific darkblue requested by user */
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
   width: 100%;
 }
 
@@ -901,19 +906,56 @@ body {
     max-width: 100vw;
   }
   
+  .navbar {
+    background: var(--bg-white) !important;
+  }
 
   .nav-menu {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 0;
     left: 0;
-    width: 100%;
-    height: calc(100vh - var(--nav-height));
-    background: var(--bg-white);
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-white); /* White theme */
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 2rem;
     box-shadow: var(--shadow-md);
     clip-path: circle(0% at 100% 0);
     transition: clip-path 0.5s ease-out;
+    z-index: 999;
+    overflow: hidden;
+    touch-action: none; 
+    gap: 1.8rem;
+  }
+  
+  .nav-menu .nav-link {
+    color: var(--text-dark); /* Dark text for white theme */
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .nav-menu .nav-link::after {
+    display: none;
+  }
+  
+  .nav-menu .nav-link.active {
+    color: darkblue !important; /* Specific darkblue requested by user */
+  }
+  
+  .nav-menu .btn-primary.auth-btn {
+    background: var(--primary-color);
+    color: var(--bg-white);
+    border: none;
+    border-radius: 8px; /* Standard shape */
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding: 1rem;
+    width: 80%;
+    text-align: center;
+    margin-top: 1rem;
   }
   
   .nav-menu.active {
@@ -921,7 +963,24 @@ body {
   }
   
   .mobile-menu-btn {
-    display: block;
+    display: flex;
+    position: relative;
+    z-index: 1000;
+    background: transparent;
+    color: var(--text-dark); /* Dark icon for white theme */
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.8rem; /* Larger icon since no background box */
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .mobile-menu-btn:focus {
+    outline: none;
   }
   
   .hero {
