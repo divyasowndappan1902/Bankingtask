@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Stackly</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* ═══════════════════════════════════════
+           HOME PAGE ANIMATIONS
+        ═══════════════════════════════════════ */
+
+        /* Scroll Reveal base */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
+                        transform 0.7s cubic-bezier(0.22,1,0.36,1);
+        }
+        .reveal.from-left  { transform: translateX(-50px); }
+        .reveal.from-right { transform: translateX(50px); }
+        .reveal.zoom-in    { transform: scale(0.88); }
+        .reveal.visible {
+            opacity: 1;
+            transform: translate(0) scale(1);
+        }
+
+        /* Stagger delays */
+        .reveal.d1 { transition-delay: 0.05s; }
+        .reveal.d2 { transition-delay: 0.15s; }
+        .reveal.d3 { transition-delay: 0.25s; }
+        .reveal.d4 { transition-delay: 0.35s; }
+        .reveal.d5 { transition-delay: 0.45s; }
+        .reveal.d6 { transition-delay: 0.55s; }
+
+
+        /* Hero floating shapes */
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hs-1 {
+            width: 320px; height: 320px;
+            border: 2px solid rgba(138,210,192,0.2);
+            top: 10%; right: 8%;
+            animation: spin-slow 18s linear infinite;
+        }
+        .hs-2 {
+            width: 180px; height: 180px;
+            border: 2px solid rgba(255,255,255,0.1);
+            bottom: 15%; left: 6%;
+            animation: spin-slow 12s linear infinite reverse;
+        }
+        .hs-3 {
+            width: 80px; height: 80px;
+            background: rgba(138,210,192,0.12);
+            top: 30%; left: 12%;
+            animation: float-shape 6s ease-in-out infinite;
+        }
+        .hs-4 {
+            width: 50px; height: 50px;
+            background: rgba(255,255,255,0.08);
+            bottom: 25%; right: 15%;
+            animation: float-shape 8s ease-in-out infinite reverse;
+        }
+        @keyframes spin-slow {
+            from { transform: perspective(800px) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            to   { transform: perspective(800px) rotateX(360deg) rotateY(180deg) rotateZ(360deg); }
+        }
+        @keyframes float-shape {
+            0%,100% { transform: perspective(800px) translateY(0) scale(1) rotateY(0deg); }
+            50%      { transform: perspective(800px) translateY(-20px) scale(1.08) rotateY(180deg); }
+        }
+
+        /* Hero content enhanced entrance */
+        .hero-content h1 { animation: hero-rise 1s 0.2s cubic-bezier(0.22,1,0.36,1) both; }
+        .hero-content p  { animation: hero-rise 1s 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+        .hero-content .btn { animation: hero-rise 1s 0.65s cubic-bezier(0.22,1,0.36,1) both; }
+        @keyframes hero-rise {
+            from { opacity:0; transform: translateY(30px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        /* Navbar shrink on scroll */
+        .navbar.scrolled {
+            height: 62px;
+            box-shadow: 0 4px 20px rgba(38,74,98,0.12);
+            background: rgba(255,255,255,0.98);
+        }
+        .navbar { transition: height 0.35s ease, box-shadow 0.35s ease, background 0.35s ease; }
+
+        /* 3D Card Hover Effect */
+        .card { 
+            overflow: hidden; 
+            perspective: 1200px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s cubic-bezier(0.22,1,0.36,1);
+        }
+        .card:hover {
+            transform: perspective(1200px) translateY(-10px) rotateX(4deg) rotateY(-4deg);
+            box-shadow: -15px 25px 40px rgba(38,74,98,0.2);
+            z-index: 10;
+        }
+        .card-img {
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+            transform: translateZ(0); 
+        }
+        .card:hover .card-img {
+            transform: scale(1.07) translateZ(30px);
+        }
+
+        /* Pulse ring on section badges */
+        .section-badge {
+            animation: badge-pulse 3s ease-in-out infinite;
+        }
+        @keyframes badge-pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(38,74,98,0.15); }
+            50%      { box-shadow: 0 0 0 6px rgba(38,74,98,0); }
+        }
+
+        /* Stats bar number glow */
+        .stat-number {
+            animation: stat-glow 3s ease-in-out infinite;
+        }
+        @keyframes stat-glow {
+            0%,100% { text-shadow: none; }
+            50%      { text-shadow: 0 0 20px rgba(138,210,192,0.5); }
+        }
+
+        /* Testimonial featured card shimmer */
+        .testimonial-featured {
+            background-size: 200% 100%;
+            animation: shimmer-bg 5s linear infinite;
+        }
+        @keyframes shimmer-bg {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Quick action card bounce icon on hover */
+        .quick-action-card:hover .qa-icon-wrap {
+            animation: bounce-icon 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+        }
+        @keyframes bounce-icon {
+            0%,100% { transform: scale(1); }
+            30%      { transform: scale(1.25) rotate(-8deg); }
+            60%      { transform: scale(0.95) rotate(4deg); }
+        }
+
+        /* Section title underline sweep */
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, #264A62, #8AD2C0);
+            border-radius: 2px;
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+        }
+        .section-title.visible::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        /* Ambient Background Animation */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            background: transparent;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float-ambient 25s infinite ease-in-out alternate;
+        }
+        .orb-1 {
+            width: 40vw; height: 40vw;
+            background: rgba(138, 210, 192, 0.4);
+            top: -10%; left: -10%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 35vw; height: 35vw;
+            background: rgba(38, 74, 98, 0.2);
+            bottom: -10%; right: -5%;
+            animation-delay: -5s;
+        }
+        .orb-3 {
+            width: 30vw; height: 30vw;
+            background: rgba(58, 123, 213, 0.3);
+            top: 40%; left: 60%;
+            animation-delay: -10s;
+        }
+        @keyframes float-ambient {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(5vw, 10vh) scale(1.1); }
+            66% { transform: translate(-10vw, 5vh) scale(0.9); }
+            100% { transform: translate(0, -5vh) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient Background Animation -->
+    <div class="ambient-bg">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <img src="assets/images/logo.webp" alt="Stackly" class="loader-logo">
+        </div>
+    </div>
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="assets/images/logo.webp" alt="Stackly Logo">
+        </a>
+        <button class="mobile-menu-btn">☰</button>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="loans.html" class="nav-link">Loans</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+            <li><a href="service.html" class="nav-link">Services</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="signin.html" class="btn btn-primary auth-btn">Sign In</a></li>
+        </ul>
+    </nav>
+    <section class="hero">
+        <img src="assets/images/home.webp" alt="Stackly Home" class="hero-bg" onerror="this.src='assets/images/home.webp';">
+        <div class="hero-overlay"></div>
+        <!-- Floating decorative shapes -->
+        <div class="hero-shape hs-1"></div>
+        <div class="hero-shape hs-2"></div>
+        <div class="hero-shape hs-3"></div>
+        <div class="hero-shape hs-4"></div>
+        <div class="hero-content">
+            <h1 id="hero-title">Welcome to Stackly Bank</h1>
+            <p>Experience the next generation of banking solutions. Secure, fast, and completely tailored to your financial lifestyle.</p>
+            <a href="signin.html" class="btn btn-accent">Open an Account</a>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="container stats-grid">
+            <div class="stat-item">
+                <div class="stat-value-wrap" style="display: flex; align-items: baseline; justify-content: center;">
+                    <span class="stat-number" data-target="2500000">0</span>
+                </div>
+                <span class="stat-label">Happy Customers</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value-wrap" style="display: flex; align-items: baseline; justify-content: center;">
+                    <span class="stat-number" data-target="98">0</span><span class="stat-suffix">%</span>
+                </div>
+                <span class="stat-label">Satisfaction Rate</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value-wrap" style="display: flex; align-items: baseline; justify-content: center;">
+                    <span class="stat-number" data-target="120">0</span>
+                </div>
+                <span class="stat-label">Years of Trust</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value-wrap" style="display: flex; align-items: baseline; justify-content: center;">
+                    <span class="stat-number" data-target="50">0</span><span class="stat-suffix">B+</span>
+                </div>
+                <span class="stat-label">Assets Managed</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Cards -->
+    <section class="section" style="background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);">
+        <div class="container">
+            <h2 class="section-title reveal">Why Choose Stackly?</h2>
+            <p class="section-subtitle reveal d1">Trusted by millions. Built for the future of banking.</p>
+            <div class="feature-cards-grid">
+                <div class="feature-card reveal d1">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #264A62, #3a7bd5);">
+                        <svg width="32" height="32" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3 class="feature-card-title">Bank-Grade Security</h3>
+                    <p class="feature-card-desc">256-bit AES encryption, multi-factor authentication, and real-time fraud monitoring protect every transaction.</p>
+                    <div class="feature-card-tag">Zero-breach record since 2004</div>
+                </div>
+                <div class="feature-card reveal d2">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #8AD2C0, #20b2a0);">
+                        <svg width="32" height="32" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <h3 class="feature-card-title">24/7 Instant Support</h3>
+                    <p class="feature-card-desc">Our AI-powered assistant and human experts are available around the clock to resolve any issue in minutes.</p>
+                    <div class="feature-card-tag">Average response: &lt;2 minutes</div>
+                </div>
+                <div class="feature-card reveal d3">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #f59e0b, #f97316);">
+                        <svg width="32" height="32" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <h3 class="feature-card-title">Zero Hidden Fees</h3>
+                    <p class="feature-card-desc">Transparent pricing on every product. What you see is exactly what you pay — no surprises, ever.</p>
+                    <div class="feature-card-tag">No maintenance charges</div>
+                </div>
+                <div class="feature-card reveal d4">
+                    <div class="feature-icon" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+                        <svg width="32" height="32" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
+                    <h3 class="feature-card-title">Smart Digital App</h3>
+                    <p class="feature-card-desc">Award-winning mobile app with AI insights, instant transfers, and personalized spending analytics.</p>
+                    <div class="feature-card-tag">4.9 ★ App Store Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container">
+        <h2 class="section-title reveal">Comprehensive Banking Solutions</h2>
+        <div class="grid">
+            <!-- Content 1 -->
+            <div class="card reveal d1">
+                <img src="assets/images/savings.webp" alt="Savings" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">1. High-Yield Savings</h3>
+                    <p>Grow your wealth with industry-leading interest rates on all savings accounts.</p>
+                    <a href="savings.html" class="btn btn-primary" style="margin-top: 1rem;">Learn More</a>
+                </div>
+            </div>
+            <!-- Content 2 -->
+            <div class="card reveal d2">
+                <img src="assets/images/checking.webp" alt="Checking" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">2. Premium Checking</h3>
+                    <p>No hidden fees, unlimited transactions, and an instant-issue debit card.</p>
+                    <a href="contact.html" class="btn btn-primary" style="margin-top: 1rem;">Open Checking</a>
+                </div>
+            </div>
+            <!-- Content 3 -->
+            <div class="card reveal d3">
+                <img src="assets/images/mortgages.webp" alt="Mortgages" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">3. Home Mortgages</h3>
+                    <p>Unlock the door to your dream home with our flexible mortgage plans.</p>
+                    <a href="mortgages.html" class="btn btn-primary" style="margin-top: 1rem;">View Rates</a>
+                </div>
+            </div>
+            <!-- Content 4 -->
+            <div class="card reveal d1">
+                <img src="assets/images/auto-loans.webp" alt="Auto Loans" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">4. Personal & Auto Loans</h3>
+                    <p>Fast approval and competitive rates for whatever life throws your way.</p>
+                    <a href="loans.html" class="btn btn-primary" style="margin-top: 1rem;">Apply Now</a>
+                </div>
+            </div>
+            <!-- Content 5 -->
+            <div class="card reveal d2">
+                <img src="assets/images/credit-cards.webp" alt="Credit Cards" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">5. Elite Credit Cards</h3>
+                    <p>Earn cashback, travel rewards, and premium perks with Stackly Elite.</p>
+                    <a href="credit-cards.html" class="btn btn-primary" style="margin-top: 1rem;">Compare Cards</a>
+                </div>
+            </div>
+            <!-- Content 6 -->
+            <div class="card reveal d3">
+                <img src="assets/images/wealth.webp" alt="Wealth Management" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">6. Wealth Management</h3>
+                    <p>Expert advisors to help you plan your future and build generational wealth.</p>
+                    <a href="wealth.html" class="btn btn-primary" style="margin-top: 1rem;">Talk to Advisor</a>
+                </div>
+            </div>
+            <!-- Content 7 -->
+            <div class="card reveal d4">
+                <img src="assets/images/business.webp" alt="Business Banking" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">7. Business Banking</h3>
+                    <p>Scalable solutions, payroll management, and corporate credit lines.</p>
+                    <a href="business.html" class="btn btn-primary" style="margin-top: 1rem;">For Business</a>
+                </div>
+            </div>
+            <!-- Content 8 -->
+            <div class="card reveal d5">
+                <img src="assets/images/investments.webp" alt="Investments" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">8. Investment Portfolios</h3>
+                    <p>AI-driven robo-advisors and self-directed trading platforms.</p>
+                    <a href="investments.html" class="btn btn-primary" style="margin-top: 1rem;">Start Trading</a>
+                </div>
+            </div>
+            <!-- Content 9 -->
+            <div class="card reveal d6">
+                <img src="assets/images/insurance.webp" alt="Insurance" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">9. Insurance Solutions</h3>
+                    <p>Protect what matters most with life, property, and health insurance.</p>
+                    <a href="insurance.html" class="btn btn-primary" style="margin-top: 1rem;">Get a Quote</a>
+                </div>
+            </div>
+            <!-- Content 10 -->
+            <div class="card reveal d1">
+                <img src="assets/images/digital.webp" alt="Digital Banking" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">10. 24/7 Digital Banking</h3>
+                    <p>Access your money anytime, anywhere with our award-winning app.</p>
+                    <a href="service.html" class="btn btn-primary" style="margin-top: 1rem;">Download App</a>
+                </div>
+            </div>
+            <!-- Content 11 -->
+            <div class="card reveal d2">
+                <img src="assets/images/mobile-banking.webp" alt="Mobile Banking & Payments" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">11. Mobile Payments</h3>
+                    <p>Tap, pay, and transfer instantly using your digital wallet securely.</p>
+                    <a href="service.html" class="btn btn-primary" style="margin-top: 1rem;">Setup Wallet</a>
+                </div>
+            </div>
+            <!-- Content 12 -->
+            <div class="card reveal d3">
+                <img src="assets/images/global-transfers.webp" alt="Global Transfers & FX" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">12. Global Transfers</h3>
+                    <p>Send money worldwide with competitive exchange rates and zero hidden fees.</p>
+                    <a href="service.html" class="btn btn-primary" style="margin-top: 1rem;">Transfer Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions Card Row -->
+    <section class="section" style="background: var(--bg-white); padding: 3rem 5%;">
+        <div class="container">
+            <h2 class="section-title reveal">Quick Actions</h2>
+            <div class="quick-actions-grid">
+                <a href="savings.html" class="quick-action-card reveal d1" id="qa-savings">
+                    <div class="qa-icon-wrap" style="background: #e0f2fe;">💰</div>
+                    <div class="qa-info">
+                        <span class="qa-title">Open Savings</span>
+                        <span class="qa-desc">Earn up to 5.2% APY</span>
+                    </div>
+                    <span class="qa-arrow">→</span>
+                </a>
+                <a href="loans.html" class="quick-action-card reveal d2" id="qa-loans">
+                    <div class="qa-icon-wrap" style="background: #e0e7ff;">🏠</div>
+                    <div class="qa-info">
+                        <span class="qa-title">Get a Loan</span>
+                        <span class="qa-desc">Rates from 6.5% APR</span>
+                    </div>
+                    <span class="qa-arrow">→</span>
+                </a>
+                <a href="dashboard.html" class="quick-action-card reveal d3" id="qa-transfer">
+                    <div class="qa-icon-wrap" style="background: #dcfce7;">💸</div>
+                    <div class="qa-info">
+                        <span class="qa-title">Send Money</span>
+                        <span class="qa-desc">Zero fees globally</span>
+                    </div>
+                    <span class="qa-arrow">→</span>
+                </a>
+                <a href="cards.html" class="quick-action-card reveal d4" id="qa-cards">
+                    <div class="qa-icon-wrap" style="background: #fef9c3;">💳</div>
+                    <div class="qa-info">
+                        <span class="qa-title">Credit Cards</span>
+                        <span class="qa-desc">3% cashback on everything</span>
+                    </div>
+                    <span class="qa-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loan Solutions Section -->
+    <section class="section" style="background-color: var(--primary-color); color: var(--bg-white);">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title" style="color: var(--bg-white); margin-bottom: 1rem;">Need Financial Backing? Explore Our Loan Options</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">Whether you're buying your dream home, financing a new car, or consolidating debt, Stackly provides transparent loans with industry-low rates.</p>
+            
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); text-align: left;">
+                <div class="card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); box-shadow: none;">
+                    <div class="card-content">
+                        <h3 class="card-title" style="color: var(--secondary-color);">Personal Loans</h3>
+                        <p style="color: var(--bg-light); opacity: 0.8; margin-bottom: 1.5rem;">Borrow up to ,000 with no hidden fees and fixed monthly payments.</p>
+                        <a href="loans.html" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">Apply Today &rarr;</a>
+                    </div>
+                </div>
+                <div class="card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); box-shadow: none;">
+                    <div class="card-content">
+                        <h3 class="card-title" style="color: var(--secondary-color);">Auto Loans</h3>
+                        <p style="color: var(--bg-light); opacity: 0.8; margin-bottom: 1.5rem;">Rates as low as 4.99% APR for new and used vehicles. Fast approval.</p>
+                        <a href="loans.html" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">Get Pre-approved &rarr;</a>
+                    </div>
+                </div>
+                <div class="card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); box-shadow: none;">
+                    <div class="card-content">
+                        <h3 class="card-title" style="color: var(--secondary-color);">Home Mortgages</h3>
+                        <p style="color: var(--bg-light); opacity: 0.8; margin-bottom: 1.5rem;">Flexible terms and low down payment options for first-time buyers.</p>
+                        <a href="mortgages.html" style="color: var(--secondary-color); font-weight: bold; text-decoration: none;">View Rates &rarr;</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <a href="loans.html" class="btn btn-accent" style="padding: 1rem 3rem; font-size: 1.1rem;">Explore All Loan Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section" style="background: #e8f4fd;">
+        <div class="container">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <p class="section-subtitle">Real stories from real people who chose Stackly.</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Stackly made buying my first home a reality. Their mortgage advisor walked me through every step and secured a rate I never thought possible."</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/jessica.webp" alt="Jessica Morgan" class="author-avatar" style="object-fit: cover;">
+                        <div class="author-info">
+                            <span class="author-name">Jessica Morgan</span>
+                            <span class="author-role">Mortgage Customer · Salem, TN</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card testimonial-featured">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"The Stackly Elite card gives me 5% back on all my business travel. I've saved over ₹80,000 in the last year alone. Absolutely incredible product."</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/rajan.webp" alt="Rajan Patel" class="author-avatar" style="object-fit: cover;">
+                        <div class="author-info">
+                            <span class="author-name">Rajan Patel</span>
+                            <span class="author-role">Business Owner · Mumbai</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Their AI investment advisor grew my portfolio by 22% last year. The app is slick, support is instant, and I trust them completely with my savings."</p>
+                    <div class="testimonial-author">
+                        <img src="assets/images/ananya.webp" alt="Ananya Sharma" class="author-avatar" style="object-fit: cover;">
+                        <div class="author-info">
+                            <span class="author-name">Ananya Sharma</span>
+                            <span class="author-role">Investment Customer · Bangalore</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Innovative Tools Section -->
+    <section class="section" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+        <div class="container">
+            <h2 class="section-title reveal">Innovative Banking Tools</h2>
+            <p class="section-subtitle reveal d1">Next-generation financial solutions designed for modern living.</p>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+                <div class="card reveal d2">
+                    <img src="assets/images/ai-savings.webp" alt="AI Savings Assistant" class="card-img" style="height: 220px; object-fit: cover;">
+                    <div class="card-content">
+                        <h3 class="card-title">AI Savings Assistant</h3>
+                        <p>Our intelligent algorithms analyze your spending habits and automatically round up purchases to build your wealth effortlessly over time.</p>
+                        <a href="service.html" class="btn btn-primary" style="margin-top: 1rem;">Enable Auto-Save</a>
+                    </div>
+                </div>
+                <div class="card reveal d3">
+                    <img src="assets/images/carbon-tracker.webp" alt="Carbon Footprint Tracker" class="card-img" style="height: 220px; object-fit: cover;">
+                    <div class="card-content">
+                        <h3 class="card-title">Carbon Footprint Tracker</h3>
+                        <p>Link your transactions to environmental impact. Monitor, reduce, and offset your carbon footprint directly from your banking app.</p>
+                        <a href="service.html" class="btn btn-primary" style="margin-top: 1rem;">View Impact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Content Section -->
+    <section class="section" style="background-color: var(--bg-white);">
+        <div class="container">
+            <h2 class="section-title">Related Content & Insights</h2>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+                <!-- Related Article 1 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format,compress&fm=webp&w=400&q=70" alt="Market Trends" class="card-img" style="height: 180px;">
+                    <div class="card-content">
+                        <h3 class="card-title" style="font-size: 1.1rem;">Global Market Trends for Q3 2026</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Discover what's driving the global economy and how our wealth managers are adjusting portfolios.</p>
+                        <a href="news.html" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">Read Article &rarr;</a>
+                    </div>
+                </div>
+                <!-- Related Article 2 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format,compress&fm=webp&w=400&q=70" alt="Security" class="card-img" style="height: 180px;">
+                    <div class="card-content">
+                        <h3 class="card-title" style="font-size: 1.1rem;">5 Ways to Secure Your Digital Identity</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Learn how Stackly is utilizing next-generation biometrics to keep your accounts completely safe.</p>
+                        <a href="news.html" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">Read Article &rarr;</a>
+                    </div>
+                </div>
+                <!-- Related Article 3 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format,compress&fm=webp&w=400&q=70" alt="Mortgages" class="card-img" style="height: 180px;">
+                    <div class="card-content">
+                        <h3 class="card-title" style="font-size: 1.1rem;">Understanding New Mortgage Regulations</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">A comprehensive guide to the upcoming federal housing changes and what it means for your rates.</p>
+                        <a href="news.html" style="color: var(--primary-color); font-weight: 600; text-decoration: none;">Read Article &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ REDESIGNED FOOTER ============ -->
+    <footer class="footer">
+        <div class="footer-inner">
+
+            <!-- Col 1: Brand -->
+            <div class="footer-brand-col">
+                <a href="index.html" class="footer-logo">
+                    <img src="assets/images/logo.webp" alt="Stackly Logo">
+                </a>
+                <p class="footer-tagline">Pioneering the next frontier of banking from Salem, Tamil Nadu.</p>
+                <div class="footer-contact-info">
+                    <a href="mailto:contact@stackly.com" class="footer-email">contact@stackly.com</a>
+                    <a href="tel:+914270000000" class="footer-phone">+91 427 000 0000</a>
+                </div>
+                <div class="footer-socials">
+                    <a href="404.html" class="social-icon" aria-label="LinkedIn">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                    </a>
+                    <a href="404.html" class="social-icon" aria-label="YouTube">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#264A62"/></svg>
+                    </a>
+                    <a href="404.html" class="social-icon" aria-label="X / Twitter">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="404.html" class="social-icon" aria-label="Instagram">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Col 2: Navigation -->
+            <div class="footer-links-col">
+                <h4 class="footer-col-heading">Navigation</h4>
+                <ul class="footer-links-list">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="service.html">Service</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Banking Services -->
+            <div class="footer-links-col">
+                <h4 class="footer-col-heading">Banking Services</h4>
+                <ul class="footer-links-list">
+                    <li><a href="savings.html">Savings &amp; Deposits</a></li>
+                    <li><a href="loans.html">Loans &amp; Credit</a></li>
+                    <li><a href="investments.html">Investments</a></li>
+                    <li><a href="credit-cards.html">Credit Cards</a></li>
+                    <li><a href="insurance.html">Insurance</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 4: Map -->
+            <div class="footer-map-col">
+                <h4 class="footer-col-heading">
+                    <svg width="14" height="14" fill="#8AD2C0" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:6px;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    Stackly HQ &mdash; Salem, TN
+                </h4>
+                <div class="footer-map-wrap">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15630.932454653335!2d78.1360098!3d11.6421454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf1c322b82141%3A0xc069b1e941ceb325!2sSalem%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1717142400000!5m2!1sen!2sin"
+                        allowfullscreen="" loading="lazy" title="Stackly Salem HQ">
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Stackly Pvt. Ltd. All Rights Reserved. &nbsp;|&nbsp; Salem, Tamil Nadu, India</p>
+        </div>
+    </footer>
+    <script src="js/app.js"></script>
+    <script>
+
+    // ── Scroll Reveal ───────────────────────────────────────────────
+    (function() {
+        const revealEls = document.querySelectorAll('.reveal');
+        const titleEls  = document.querySelectorAll('.section-title');
+
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    revealObs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        const titleObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    titleObs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        revealEls.forEach(el => revealObs.observe(el));
+        titleEls.forEach(el => titleObs.observe(el));
+    })();
+
+    // ── Navbar Shrink on Scroll ─────────────────────────────────────
+    (function() {
+        const navbar = document.querySelector('.navbar');
+        if (!navbar) return;
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 60);
+        }, { passive: true });
+    })();
+
+    // ── Stats Counter Animation ─────────────────────────────────────
+    (function() {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        if (statNumbers.length === 0) return;
+        
+        let hasCounted = false;
+        const countObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasCounted) {
+                    hasCounted = true;
+                    statNumbers.forEach(stat => {
+                        const target = +stat.getAttribute('data-target');
+                        const duration = 2000; // 2 seconds
+                        const stepTime = Math.abs(Math.floor(duration / 60)); // 60fps
+                        
+                        let current = 0;
+                        const increment = target / (duration / stepTime);
+                        
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(timer);
+                            }
+                            // Format number with commas
+                            stat.innerText = Math.floor(current).toLocaleString();
+                        }, stepTime);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        // Observe the first stat number's parent container
+        const statsGrid = document.querySelector('.stats-grid');
+        if (statsGrid) {
+            countObserver.observe(statsGrid);
+        }
+    })();
+    </script>
+</body>
+</html>

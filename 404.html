@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Stackly</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* ── 404 Page Animations ── */
+        .page-404 {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f1e2e 0%, #1a3a50 50%, #264A62 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Floating orbs background */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.18;
+            animation: float-orb 8s ease-in-out infinite;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #8AD2C0; top: -100px; left: -100px; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: #3a7bd5; bottom: -80px; right: -80px; animation-delay: -3s; }
+        .orb-3 { width: 200px; height: 200px; background: #8AD2C0; top: 50%; left: 60%; animation-delay: -5s; animation-duration: 6s; }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+
+        /* Particle dots */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(138, 210, 192, 0.5);
+            border-radius: 50%;
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { transform: translateY(-20px) translateX(40px); opacity: 0; }
+        }
+
+        /* Main content */
+        .content-404 {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            animation: content-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes content-rise {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Big glitch 404 number */
+        .glitch-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .glitch {
+            font-size: clamp(7rem, 20vw, 12rem);
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -4px;
+            line-height: 1;
+            position: relative;
+            text-shadow: 0 0 40px rgba(138,210,192,0.4);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: '404';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            font-size: inherit;
+            font-weight: inherit;
+            letter-spacing: inherit;
+        }
+
+        .glitch::before {
+            color: #8AD2C0;
+            clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+            animation: glitch-top 4s infinite linear;
+            left: 3px;
+        }
+
+        .glitch::after {
+            color: #3a7bd5;
+            clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+            animation: glitch-bot 4s infinite linear;
+            left: -3px;
+        }
+
+        @keyframes glitch-top {
+            0%, 90%, 100% { transform: translateX(0); opacity: 0; }
+            92%  { transform: translateX(-4px); opacity: 0.8; }
+            94%  { transform: translateX(4px);  opacity: 0.8; }
+            96%  { transform: translateX(-2px); opacity: 0.8; }
+            98%  { transform: translateX(2px);  opacity: 0.8; }
+        }
+
+        @keyframes glitch-bot {
+            0%, 88%, 100% { transform: translateX(0); opacity: 0; }
+            90% { transform: translateX(4px);  opacity: 0.8; }
+            92% { transform: translateX(-4px); opacity: 0.8; }
+            94% { transform: translateX(2px);  opacity: 0.8; }
+            96% { transform: translateX(-2px); opacity: 0.8; }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 40px rgba(138,210,192,0.4); }
+            50%       { text-shadow: 0 0 80px rgba(138,210,192,0.7), 0 0 120px rgba(58,123,213,0.3); }
+        }
+
+        /* Divider line */
+        .line-404 {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #8AD2C0, #3a7bd5);
+            margin: 0 auto 1.5rem;
+            border-radius: 2px;
+            animation: line-expand 1s 0.5s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        @keyframes line-expand {
+            from { width: 0; opacity: 0; }
+            to   { width: 80px; opacity: 1; }
+        }
+
+        /* Badge */
+        .badge-404 {
+            display: inline-block;
+            background: rgba(138,210,192,0.15);
+            border: 1px solid rgba(138,210,192,0.4);
+            color: #8AD2C0;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            animation: badge-pop 0.6s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        @keyframes badge-pop {
+            from { opacity: 0; transform: scale(0.7); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .text-404-title {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            animation: content-rise 0.9s 0.2s both;
+        }
+
+        .text-404-sub {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.6);
+            max-width: 420px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.7;
+            animation: content-rise 0.9s 0.35s both;
+        }
+
+        /* Animated button */
+        .btn-home-404 {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, #8AD2C0, #3ab0a0);
+            color: #0f1e2e;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.9rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(138,210,192,0.35);
+            animation: content-rise 0.9s 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-home-404::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .btn-home-404:hover::before {
+            width: 300px; height: 300px;
+        }
+
+        .btn-home-404:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px rgba(138,210,192,0.5);
+        }
+
+        .btn-arrow {
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .btn-home-404:hover .btn-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Floating coins */
+        .coin {
+            position: absolute;
+            font-size: 2rem;
+            animation: coin-float linear infinite;
+            opacity: 0.12;
+            pointer-events: none;
+        }
+
+        @keyframes coin-float {
+            0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            5%   { opacity: 0.12; }
+            95%  { opacity: 0.12; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <div class="loader-circle"></div>
+            <img src="assets/images/logo.webp" alt="Stackly" class="loader-logo">
+        </div>
+    </div>
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="assets/images/logo.webp" alt="Stackly Logo">
+        </a>
+        <button class="mobile-menu-btn">☰</button>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="loans.html" class="nav-link">Loans</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+            <li><a href="service.html" class="nav-link">Services</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="signin.html" class="btn btn-primary auth-btn">Sign In</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-404">
+
+        <!-- Glowing orbs -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+
+        <!-- Floating particles (JS generated) -->
+        <div class="particles" id="particles"></div>
+
+        <!-- Floating coin emojis -->
+        <span class="coin" style="left:8%;  animation-duration:12s; animation-delay:0s;   font-size:1.5rem;">💰</span>
+        <span class="coin" style="left:20%; animation-duration:15s; animation-delay:-4s;  font-size:2rem;">🏦</span>
+        <span class="coin" style="left:35%; animation-duration:10s; animation-delay:-7s;  font-size:1.2rem;">💳</span>
+        <span class="coin" style="left:55%; animation-duration:14s; animation-delay:-2s;  font-size:1.8rem;">📈</span>
+        <span class="coin" style="left:70%; animation-duration:11s; animation-delay:-9s;  font-size:1.4rem;">💵</span>
+        <span class="coin" style="left:85%; animation-duration:13s; animation-delay:-5s;  font-size:2rem;">🏧</span>
+
+        <!-- Main content -->
+        <div class="content-404">
+            <div class="badge-404">Error 404</div>
+
+            <div class="glitch-wrap">
+                <div class="glitch">404</div>
+            </div>
+
+            <div class="line-404"></div>
+
+            <p class="text-404-title">Oops! Page Not Found</p>
+            <p class="text-404-sub">The page you're looking for is currently under construction or doesn't exist. Let's get you back on track.</p>
+
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="javascript:history.back()" class="btn-home-404" style="background: transparent; border: 2px solid #8AD2C0; color: #8AD2C0;">
+                    ← Previous Page
+                </a>
+                <a href="index.html" class="btn-home-404">
+                    Back to Home
+                    <span class="btn-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Generate floating particles
+        const container = document.getElementById('particles');
+        for (let i = 0; i < 40; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.cssText = `
+                left: ${Math.random() * 100}%;
+                width: ${Math.random() * 3 + 2}px;
+                height: ${Math.random() * 3 + 2}px;
+                animation-duration: ${Math.random() * 12 + 8}s;
+                animation-delay: ${Math.random() * -20}s;
+                opacity: ${Math.random() * 0.4 + 0.1};
+            `;
+            container.appendChild(p);
+        }
+    </script>
+</body>
+</html>
